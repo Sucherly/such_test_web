@@ -1,0 +1,57 @@
+{% extends "base_index.html"%}
+{% from "site/apiModal.html" import apiModal,api_test_code,api_run_code,api_result_show with context%}
+{%block scripts%}
+{{super()}}
+<script src="{{url_for('static',filename='js/api.js')}}"></script>
+{%endblock%}
+{%block content%}
+<div class="container_fluid contain_padding" id="product_nav">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb main_bg shadow-lg">
+            <li class="breadcrumb-item"><a href="#">{{data.name}}</a></li>
+        </ol>
+    </nav>
+</div>
+<div class="container-fluid">
+    <div class="row shadow-sm p-3 bg-white rounded">
+
+
+        <div class="col-md-11 contain_padding" id="apiTable">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>url</th>
+                    <th>简介</th>
+                    <th>版本</th>
+                    <th>状态</th>
+                    <th>请求方式</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-1">
+            <div class="btn-group-vertical">
+                <button type="button" class="btn btn_img" data-toggle="modal" data-target="#apiModal"
+                        data-whatever="new" title="新增">
+                    <img src="{{url_for('static',filename='images/add.png')}}" class="img_m" alt="新增">
+                </button>
+                <button type="button" class="btn btn_img" data-toggle="modal" data-target="#apiModal"
+                        data-whatever="import" title="导入">
+                    <img src="{{url_for('static',filename='images/import.png')}}" class="img_m" alt="导入">
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+{{apiModal()}}
+{{api_test_code()}}
+{{api_run_code()}}
+{{api_result_show()}}
+{%endblock%}

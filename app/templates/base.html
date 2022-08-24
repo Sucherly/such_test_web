@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="shortcut icon" href="{{url_for('static',filename='images/logo.png')}}" type="image/x-icon">
+    {%block title%}
+    <title>such_test_web</title>
+    {%endblock%}
+    {%block styles%}
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/main.css')}}">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+    {%endblock%}
+    {%block scripts%}
+    <script src="{{url_for('static',filename='js/jquery-3.6.0.min.js')}}"></script>
+    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>-->
+    <script src="{{url_for('static',filename='js/popper.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/main.js')}}"></script>
+    <script src="{{url_for('static',filename='js/main_jq.js')}}"></script>
+    <!--    <script src="{{url_for('static',filename='js/my_canvas.js')}}"></script>-->
+    <script src="{{url_for('static',filename='js/my_request.js')}}"></script>
+    <script src="{{url_for('static',filename='js/jquery.particleground.min.js')}}"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+    {%endblock%}
+</head>
+<body>
+
+<div class="" id="div_background">
+    <canvas id="canvas_back">
+
+    </canvas>
+</div>
+<div class="div_main" id="main">
+    {%block page%}
+
+    {%endblock%}
+</div>
+</body>
+</html>

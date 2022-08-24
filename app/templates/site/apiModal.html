@@ -1,0 +1,234 @@
+{%macro apiModal()%}
+<div class="modal fade" id="apiModal" tabindex="-1" aria-labelledby="apiModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="apiModalLabel">接口</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="apiForm" method="post" name="apiForm">
+                    <div class="form-row">
+                        <div class="form-group row col-md-12" style="display:none;" id="api_id">
+                            <label class="col-sm-2 col-form-label" for="inputAPIName">id</label>
+                            <div class="col-sm-9">
+                                <input name="id" type="text" class="form-control" id="inputAPIId"
+                                       aria-describedby="apiNameHelp" readonly>
+                                <small id="idHelp" class="form-text text-muted">名称不可重复</small>
+                            </div>
+                        </div>
+                        <div class="form-group row col-md-6">
+                            <label class="col-sm-3 col-form-label" for="inputAPIName">名称</label>
+                            <div class="col-sm-9">
+                                <input name="name" type="text" class="form-control" id="inputAPIName"
+                                       aria-describedby="apiNameHelp">
+                                <small id="apiNameHelp" class="form-text text-muted">名称不可重复</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row col-md-6">
+                            <label class="col-sm-3 col-form-label" for="inputUrl">路由</label>
+                            <div class="col-sm-9">
+                                <input name="url" type="text" class="form-control" id="inputUrl"
+                                       aria-describedby="urlHelp">
+                                <small id="urlHelp" class="form-text text-muted">路由不可重复</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group row col-md-6">
+                            <label class="col-sm-3 col-form-label" for="inputVersion">版本</label>
+                            <div class="col-sm-9">
+                                <input name="version" type="number" class="form-control" id="inputVersion"
+                                       aria-describedby="versionHelp" min="1">
+                            </div>
+                        </div>
+                        <div class="form-group row col-md-6">
+                            <label class="col-sm-3 col-form-label" for="inputStatus">状态</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="status" id="inputStatus">
+                                    <option value="0">启用</option>
+                                    <option value="1">已弃用</option>
+                                    <option value="2">未完全弃用</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group row col-md-6">
+                            <label class="col-sm-3 col-form-label" for="inputProduct">所属产品</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="product" id="inputProduct">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row col-md-6">
+                            <label class="col-sm-3 col-form-label" for="inputModule">功能版块</label>
+                            <div class="col-sm-9">
+                                <input name="module" type="text" class="form-control" id="inputModule"
+                                       aria-describedby="moduleHelp">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="inputDescription">简介</label>
+                        <div class="col-sm-9">
+                        <textarea name="description" class="form-control" id="inputDescription"
+                                  aria-describedby="descriptionHelp"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="inputRequest_type">请求方式</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="request_type" id="inputRequest_type">
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                                <option value="PUT">PUT</option>
+                                <option value="DELETE">DELETE</option>
+                                <option value="HEAD">HEAD</option>
+                                <option value="CONNECT">CONNECT</option>
+                                <option value="OPTIONS">OPTIONS</option>
+                                <option value="TRACE">TRACE</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="inputRequest_params">入参</label>
+                        <div class="col-sm-9">
+                        <textarea name="request_params" class="form-control" id="inputRequest_params"
+                                  aria-describedby="request_paramsHelp"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="inputResponse_params">出参</label>
+                        <div class="col-sm-9">
+                        <textarea name="response_params" class="form-control" id="inputResponse_params"
+                                  aria-describedby="response_paramsHelp"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="inputExcept_response">异常返回</label>
+                        <div class="col-sm-9">
+                        <textarea name="except_response" class="form-control" id="inputExcept_response"
+                                  aria-describedby="except_responseHelp"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label" for="inputRemark">备注</label>
+                        <div class="col-sm-9">
+                        <textarea name="remark" class="form-control" id="inputRemark"
+                                  aria-describedby="remarkHelp"></textarea>
+                        </div>
+                    </div>
+
+                    <button type="reset" class="btn btn-primary" onfocus="this.blur()">清空</button>
+                    <button type="submit" class="btn btn-primary  float-right">提交</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{%endmacro%}
+
+{%macro api_test_code()%}
+<div class="modal fade" id="apiTestCode" tabindex="-1" aria-labelledby="apiTestCodeLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content width_800">
+            <div class="modal-header">
+                <h5 class="modal-title" id="apiTestCodeLabel">测试代码</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="bd-clipboard">
+                <button type="button" class="btn btn-clipboard float-right contain_margin_2" title=""
+                        data-original-title="Copy to clipboard">复制
+                </button>
+            </div>
+            <div class="modal-body code">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{%endmacro%}
+
+{%macro api_run_code()%}
+<div class="modal fade" id="apiRunCode" tabindex="-1" aria-labelledby="apiRunCodeLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content width_800">
+            <div class="modal-header">
+                <h5 class="modal-title" id="apiRunCodeLabel">运行</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <form id="runTestForm" method="post">
+                        <div class="form-group">
+                            <label for="inputUrlPre">产品环境地址</label>
+                            <input name="url" type="text" class="form-control" id="inputUrlPre"
+                                   aria-describedby="urlPreHelp">
+                            <small id="urlPreHelp" class="form-text text-muted">例如：http://127.0.0.1:8080</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputUrlParam">参数</label>
+                            <textarea name="param" class="form-control" id="inputUrlParam"
+                                      aria-describedby="urlParamHelp"></textarea>
+                            <small id="urlParamHelp"
+                                   class="form-text text-muted">参数名=参数值，多个根据实际情况填写。例如：product=1,id=1</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputBody">body</label>
+                            <textarea name="body" class="form-control" id="inputBody"
+                                      aria-describedby="bodyHelp"></textarea>
+                            <small id="bodyHelp" class="form-text text-muted">json格式，例如{"id":1,"name":"名称"}</small>
+                        </div>
+                        <button type="reset" class="btn btn-primary" onfocus="this.blur()">清空</button>
+                        <button type="submit" class="btn btn-primary">提交</button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{%endmacro%}
+
+{%macro api_result_show()%}
+<div class="modal" tabindex="-1" id="apiResultShow" >
+  <div class="modal-dialog">
+    <div class="modal-content width_800">
+      <div class="modal-header">
+        <h5 class="modal-title">运行结果</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" name="close_btn">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+                    <label for="status">status</label>
+                    <div class="form-control" id="status"></div>
+                </div>
+                <div class="form-group">
+                    <label for="message">message</label>
+                    <div class="form-control" id="message"></div>
+                </div>
+                <div class="form-group">
+                    <label for="response">response</label>
+                    <div class="form-control" id="response"></div>
+                </div>
+      </div>
+    </div>
+  </div>
+</div>
+{%endmacro%}

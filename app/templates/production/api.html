@@ -1,0 +1,107 @@
+{% extends "base_index.html"%}
+{% from "site/apiModal.html" import apiModal with context%}
+{%block scripts%}
+{{super()}}
+<script src="{{url_for('static',filename='js/api_info.js')}}"></script>
+{%endblock%}
+{%block content%}
+<div class="container_fluid contain_padding" id="product_nav">
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb main_bg shadow-lg">
+                <li class="breadcrumb-item"><a href="{{url_for('main.apis',product=data.product)}}">{{data.product|product_name()}}</a>
+                </li>
+                <li class="breadcrumb-item"><a
+                        href="{{url_for('main.get_api_by_id',data_id=data.id)}}" name="name" data-id="{{data.id}}">{{data.name}}</a>
+                </li>
+            </ol>
+        </nav>
+        <div class="float-right contain_padding">
+            <button type="button" class="btn btn-outline-primary text-light" data-toggle="modal" data-target="#apiModal">编辑</button>
+            <button type="button" class="btn btn-outline-primary text-light warn_bgColor" id="delete_api">删除</button>
+        </div>
+
+    </div>
+    <div class="shadow p-3 mb-5 bg-white rounded">
+        <h5>{{data.name}}
+            <span class="badge badge-secondary main_bgColor">V{{data.version}}</span>
+            <span class="badge badge-secondary second_bgColor">{{data.status_corresponding()}}</span>
+            <span class="badge badge-secondary third_bgColor">{{data.request_type}}</span>
+        </h5>
+        <p class="text-muted">{{data.description}}</p>
+    </div>
+
+
+    <div class="shadow-sm p-3 mb-5 bg-white rounded">
+        <div class="row">
+            <div class="col-1 text-info">
+                <p>url</p>
+            </div>
+            <div class="col-11 text-success">
+                <p>{{data.url}}</p>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-1 text-info">
+                <p>所属产品</p>
+            </div>
+            <div class="col-11">
+                <p>{{data.product|product_name()}}</p>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-1 text-info">
+                <p>功能版块</p>
+            </div>
+            <div class="col-11">
+                <p>{{data.module}}</p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="shadow-sm p-3 mb-5 bg-white rounded contain_margin_2">
+        <div class="row">
+            <div class="col-12 text-info">
+                <p>入参</p>
+            </div>
+            <div class="col-12 card contain_margin_2">
+                <p>{{data.request_params}}</p>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12 text-info">
+                <p>响应</p>
+            </div>
+            <div class="col-12 card contain_margin_2">
+                <p>{{data.response_params}}</p>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12 text-info">
+                <p>异常情形</p>
+            </div>
+            <div class="col-12 card contain_margin_2">
+                <p>{{data.response_params}}</p>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12 text-info">
+                <p>备注</p>
+            </div>
+            <div class="col-12 card contain_margin_2">
+                <p>{{data.remark}}</p>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{{apiModal()}}
+{%endblock%}
