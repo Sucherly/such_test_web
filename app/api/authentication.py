@@ -1,7 +1,8 @@
 from functools import wraps
 
-from flask import g, jsonify, Response, make_response
+from flask import g, jsonify, Response, make_response, request
 from flask_httpauth import HTTPBasicAuth
+from flask_login import login_required, fresh_login_required
 
 from app.api import api
 from app.api.check_info import option_ok
@@ -19,23 +20,23 @@ def verify_password(email_or_token, password):
     if password == '':
         g.current_user = User.verify_auth_token(email_or_token)
         g.token_user = True
-    user = User.query.filter_by(email=email_or_token).first()
-    if not user:
-        return False
-    g.current_user = user
-    g.token_user = False
-    return user.verify_password(password)
+        return True
+    else:
+        user = User.query.filter_by(email=email_or_token).first()
+        if not user:
+            return False
+        g.current_user = user
+        g.token_user = False
+        return user.verify_password(password)
+
 
 @auth.error_handler
 def auth_error():
     return unauthorized('非法认证')
 
 @api.before_request
-@auth.login_required
+@fresh_login_required
 def before_request():
-    # if not g.current_user.is_anonymous and \
-    #         not g.current_user.true_name:
-    #     return forbidden('未确认用户，真实姓名需维护')
     return None
 
 @api.route('/get_token', methods=['POST'])

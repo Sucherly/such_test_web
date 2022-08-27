@@ -1,4 +1,27 @@
 $(function(){
+    // 添加全局请求头
+$.ajaxSetup({
+        global:true,
+        timeout:10000,
+        beforeSend:function(XMLHttpRequest,settings){
+            XMLHttpRequest.setRequestHeader('authorization', localStorage.getItem("token"))
+
+        },
+        complete:function(XMLHttpRequest,textStatus){
+            var sessionstatus = XMLHttpRequest.getResponseHeader("sessionstatus");
+            var status  = XMLHttpRequest.status;
+            var readyState  = XMLHttpRequest.readyState;
+            console.log(status);
+            console.log(XMLHttpRequest.responseText);
+            if(status!=200 && this.url.indexOf("/api/login")<=0 && !localStorage.getItem("name")){
+                alert("请先登录！");
+                    location.href="/";
+            }
+            if(status=405){
+                
+            }
+        }
+    })
 //导航条active显示
 let loc_pre=location.host
 let path=location.pathname
@@ -76,6 +99,7 @@ $("#loginForm").submit(function(e){
         contentType:"application/json",
         data:json,
         success:function(data){
+            alert("登录成功！");
             localStorage.setItem("token",JSON.stringify(data.token));
             localStorage.setItem("name",JSON.stringify(data.data.username));
             location.reload();
@@ -84,13 +108,14 @@ $("#loginForm").submit(function(e){
 });
 //退出
 $("#logout").on("click",function(){
+    console.log(location.href);
     $.ajax({
         url: "/api/logout",
         type: "GET",
         dataType: "json",
         success: function(data) {
             localStorage.clear();
-            location.reload();
+            location.href="/";
         }
     });
 });

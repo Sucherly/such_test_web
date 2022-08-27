@@ -7,7 +7,7 @@ from app.api.check_info import option_ok, api_response
 from app.models import Production, ProInterface
 
 
-@api.route('/productions', methods=['GET'])
+@api.route('/productions', methods=['GET',"POST"])
 def get_productions():
     """获取所有产品"""
     res = Production.query.all()

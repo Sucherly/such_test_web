@@ -1,7 +1,7 @@
 import os
 from flask_migrate import Migrate, upgrade, init
 
-from app import create_app, db
+from app import create_app, db, login_manager
 from app.models import Production, ProField, User, ProInterface, CommonField
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
@@ -13,6 +13,16 @@ def make_shell_context():
     """上下文设置"""
     return dict(db=db, User=User, Production=Production, ProField=ProField, ProInterface=ProInterface,CommonField=CommonField)
 
+@login_manager.request_loader
+def load_user_from_request(request):
+    auth = request.authorization
+    if not auth:
+        return None
+    try:
+        user = User.objects.get(username=auth.username)
+    except User.DoesNotExist:
+        user = None
+    return user
 
 @app.cli.command()
 def create():

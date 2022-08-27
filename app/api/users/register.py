@@ -1,7 +1,10 @@
+from base64 import b64encode
+
 from flask import request, url_for
 from flask_login import login_user, login_required, logout_user
 
 from app import db
+from app.api.authentication import verify_password
 from app.api.check_info import duplicated, field_superfluous, option_ok, option_null, not_fund
 from app.api.users import user_api
 from app.models import User
@@ -10,7 +13,6 @@ from app.models import User
 @user_api.route('/register', methods=['POST'])
 def register():
     """注册用户"""
-    res=request
     user_data = request.json
     # 判断用户是否存在
     user = User.query.filter_by(email=user_data['email']).first()
@@ -47,7 +49,10 @@ def login():
     if user is not None and user.verify_password(user_data['password']):
         remember_me = True if 'remember_me' in user_data and user_data['remember_me'] else False
         login_user(user, remember_me)
-        return option_ok(user.to_json(), **{'token': user.generate_auth_token(expiration=3600), 'expiration': 3600})
+        token=user.generate_auth_token(expiration=3600)
+        token='Basic ' + b64encode(
+                (user.email + ':' + user_data['password']).encode('utf-8')).decode('utf-8')
+        return option_ok(user.to_json(), **{'token': token, 'expiration': 3600})
     response = not_fund(user_data['email'])
     return response
 
@@ -80,8 +85,7 @@ def get_info():
     return {'msg': '测试返回信息'}
 
 
-@user_api.route('/logout')
-@login_required
+@user_api.route('/logout', methods=['GET'])
 def logout():
     logout_user()
     return option_ok('退出登录成功！')
