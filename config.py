@@ -7,6 +7,15 @@ class Config:
     SECRET_KEY = os.environ.get('SECCRET_KEY') or 'Sucherly'
     SQLALCHEMY_TRACK_MODIFICATIONS = False  # Flask-SQLAlchemy 追踪对象的修改并且发送信号功能关闭
 
+    # 邮件配置
+    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.qq.com')
+    MAIL_PORT = int(os.environ.get('MAIL_PORT', '587'))
+    FLASKY_MAIL_SENDER = 'Flasky Sucherly <example@qq.com>'
+    FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+    FLASKY_MAIL_SUBJECT_PREFIX = os.environ.get('FLASKY_MAIL_SUBJECT_PREFIX') or "[SUCH_TEST_WEB]"
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+
     @staticmethod
     def init_app(app):
         pass
@@ -27,12 +36,6 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or "sqlite:///" + os.path.join(basedir,
                                                                                             "data.sqlite") + "?check_same_thread=False"
-    MAIL_USERNAME="ling.kaito@qq.com"
-    MAIL_PASSWORD=" smtp.qq.com"
-    MAIL_SERVER="smtp.qq.com"
-    MAIL_PORT="465" # qq是465或587
-    FLASKY_ADMIN="ling.kaito@qq.com"
-    FLASKY_MAIL_SUBJECT_PREFIX='SUCH_TEST_WEB'
 
     @classmethod
     def init_app(cls, app):
@@ -48,10 +51,11 @@ class ProductionConfig(Config):
                 secure = ()
         mail_handler = SMTPHandler(
             mailhost=(cls.MAIL_SERVER, cls.MAIL_PORT),
-            fromaddr=[cls.FLASKY_ADMIN],
+            fromaddr=cls.FLASKY_MAIL_SENDER,
+            toaddrs=[cls.FLASKY_ADMIN],
             subject=cls.FLASKY_MAIL_SUBJECT_PREFIX + ' 应用程序错误',
             credentials=credentials,
-            secure=secure
+            secure=secure,
         )
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
@@ -61,5 +65,5 @@ config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
-    'default': DevelopmentConfig
+    'default': ProductionConfig
 }
