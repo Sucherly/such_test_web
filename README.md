@@ -31,18 +31,6 @@ pip install bootstrap4 --default-timeout=10000
 
 注意安装完成后检查下werkzeug的版本是否与flask版本一致
 ```
-## node
-下载地址：https://nodejs.org/zh-cn/download/
-## npm 安装第三方库
-```commandline
-npm install -g create-react-app
-```
-（创建应用create-react-app "C:\python project\such_test_web\frontend"）
-
-# 本项目构建
-
-```commandline
-cd C:\python project\such_test_web\frontend
-npm start
-npm run build
-```
+# 示范包使用
+`such_test_web.zip`为示范包，请先解压缩，再查看使用说明文档进行使用。
+使用前请先确保已安装python。包中已包含第三方库，无需单独安装。
