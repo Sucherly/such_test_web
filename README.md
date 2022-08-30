@@ -28,6 +28,8 @@ pip install authlib --default-timeout=10000
 pip install python-dotenv --default-timeout=10000
 pip install flask-cors --default-timeout=10000
 pip install bootstrap4 --default-timeout=10000
+pip install chinese_calendar --default-timeout=10000
+pip install gitpython --default-timeout=10000
 
 注意安装完成后检查下werkzeug的版本是否与flask版本一致
 ```
