@@ -35,7 +35,7 @@ def auth_error():
     return unauthorized('非法认证')
 
 @api.before_request
-@fresh_login_required
+@auth.login_required()
 def before_request():
     return None
 

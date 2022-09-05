@@ -187,7 +187,7 @@ class ProField(db.Model):
     eg = db.Column(db.Text, nullable=False)  # 示例
 
     def __repr__(self):
-        return '<User %r>' % self.name
+        return '<ProField %r>' % self.name
 
 
 class ProInterface(db.Model):
@@ -207,7 +207,7 @@ class ProInterface(db.Model):
     UniqueConstraint('name', 'version', name='uq_name_version')  # name,version联合唯一
 
     def __repr__(self):
-        return '<User %r>' % self.name
+        return '<ProInterface %r>' % self.name
 
     def to_json(self):
         """转换json"""
@@ -230,3 +230,53 @@ class ProInterface(db.Model):
         """状态的中文"""
         desc = ['启用', '已弃用', '未完全弃用，已有新接口代替']
         return desc[self.status]
+
+
+# 缺陷管理版块
+
+class BugsOfAPI(db.Model):
+    """接口bug表"""
+    __tablename__ = 'bugsOfAPI'
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    name = db.Column(db.Text, nullable=False)  # 接口路由
+    interface_id = db.Column(db.Integer)  # 存储在本平台的接口id
+    description = db.Column(db.Text)  # 接口简介
+    version = db.Column(db.Integer, nullable=False)  # 接口版本
+    product = db.Column(db.Integer, db.ForeignKey('productions.id'), nullable=False)  # 产品表(productions)的外键，关联于id
+    priority = db.Column(db.Integer)  # 优先级
+    request_headers = db.Column(db.Text)  # 接口入参。字段名:字段类型。多个字段以英文逗号分隔
+    request_body = db.Column(db.Text)  # 接口入参。字段名:字段类型。多个字段以英文逗号分隔
+    response_headers = db.Column(db.Text)  # 接口出参。字段名:字段类型。多个字段以英文逗号分隔
+    response_body = db.Column(db.Text)  # 接口出参。字段名:字段类型。多个字段以英文逗号分隔
+    module = db.Column(db.String(64), nullable=False)  # 功能版块
+    request_type = db.Column(db.String(64), nullable=False)  # 请求方式
+    developer = db.Column(db.Text)  # 原开发人员
+    conductor = db.Column(db.Text)  # 问题处理开发人员
+    discoverer = db.Column(db.Text)  # 问题发现人
+    tester = db.Column(db.Text)  # 问题测试人
+    files = db.Column(db.Text)  # 附件
+    remark = db.Column(db.Text)  # 备注
+    UniqueConstraint('name', 'version', name='uq_name_version')  # name,version联合唯一
+
+    def __repr__(self):
+        return '<BugsOfAPI %r>' % self.name
+
+class BugsOfUI(db.Model):
+    """UI bug表"""
+    __tablename__ = 'bugsOfUI'
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    name = db.Column(db.Text, nullable=False)  # 问题名称
+    description = db.Column(db.Text, nullable=False)  # 问题详情
+    version = db.Column(db.Integer, nullable=False)  # 版本
+    product = db.Column(db.Integer, db.ForeignKey('productions.id'), nullable=False)  # 产品表(productions)的外键，关联于id
+    priority = db.Column(db.Integer)  # 优先级
+    developer = db.Column(db.Text)  # 原开发人员
+    conductor = db.Column(db.Text)  # 问题处理开发人员
+    discoverer = db.Column(db.Text)  # 问题发现人
+    tester = db.Column(db.Text)  # 问题测试人
+    files = db.Column(db.Text)  # 附件
+    remark = db.Column(db.Text)  # 备注
+    UniqueConstraint('name', 'version', name='uq_name_version')  # name,version联合唯一
+
+    def __repr__(self):
+        return '<BugsOfUI %r>' % self.name

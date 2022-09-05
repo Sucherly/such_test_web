@@ -1,6 +1,6 @@
 $(function(){
     // 添加全局请求头
-$.ajaxSetup({
+    $.ajaxSetup({
         global:true,
         timeout:10000,
         beforeSend:function(XMLHttpRequest,settings){
@@ -12,16 +12,29 @@ $.ajaxSetup({
             var status  = XMLHttpRequest.status;
             var readyState  = XMLHttpRequest.readyState;
             console.log(status);
-            console.log(XMLHttpRequest.responseText);
-            if(status!=200 && this.url.indexOf("/api/login")<=0 && !localStorage.getItem("name")){
+            console.log(textStatus);
+            console.log(this.url)
+            if(status!=200 && this.url.indexOf("/api/login")<=0 &&this.url!="/api/login" &&this.url!="/api/register" && !localStorage.getItem("name")){
                 alert("请先登录！");
-                    location.href="/";
+                location.href="/";
             }
             if(status=405){
-                
+
             }
-        }
+        },
+        error:function(xhtp,info){
+            console.log(xhtp);
+            let data=xhtp.responseJSON;
+            alert(data.msg);
+            // location.href="/";
+            },
     })
+
+// 检测cookie以设置storage
+if(!getCookie('token')){
+   //清除
+   localStorage.clear();
+}
 //导航条active显示
 let loc_pre=location.host
 let path=location.pathname
@@ -91,7 +104,7 @@ $("#loginForm").submit(function(e){
     let form_name=this_form.attr('name')
     let url=form_name=="login"?"login":"register";
     let json = JSON.stringify(form_data);
-    console.log(json);
+    console.log("注册登录提交数据"+json);
     $.ajax({
         url:"/api/"+url,
         type:"POST",
@@ -99,11 +112,26 @@ $("#loginForm").submit(function(e){
         contentType:"application/json",
         data:json,
         success:function(data){
-            alert("登录成功！");
-            localStorage.setItem("token",JSON.stringify(data.token));
-            localStorage.setItem("name",JSON.stringify(data.data.username));
-            location.reload();
-        }
+            console.log("登录接口状态"+data);
+            
+            if(data.code==200){
+                console.log("200"+data);
+                alert("登录成功！");
+                let token=JSON.stringify(data.token);
+                localStorage.setItem("token",token);
+                localStorage.setItem("name",JSON.stringify(data.data.username));
+                setCookie("token",token)
+                location.reload();
+            }
+            else{
+                console.log("others:");
+                console.log(data);
+                alert(data);
+                location.href="/";
+            }
+            
+        },
+        
     });
 });
 //退出
@@ -151,22 +179,22 @@ $('#myTab a').on('click', function (event) {
 });
 // 产品selection的option设置
 if($("#inputProduct").length){
-$.ajax({
-    url: "/api/productions",
-    type: "GET",
-    dataType: "json",
-    success: function(data) {
-        let res=data.data
-        let product_select=$("#inputProduct")
-        for(i=0;i<res.length;i++){
-            let dt=res[i];
-            let op_ele=document.createElement('option')
-            op_ele.value=dt.id;
-            op_ele.text=dt.name;
-            product_select.append(op_ele);
+    $.ajax({
+        url: "/api/productions",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            let res=data.data
+            let product_select=$("#inputProduct")
+            for(i=0;i<res.length;i++){
+                let dt=res[i];
+                let op_ele=document.createElement('option')
+                op_ele.value=dt.id;
+                op_ele.text=dt.name;
+                product_select.append(op_ele);
+            }
         }
-    }
-});
+    });
 }
 
 $('div[class$=".code"]').each(el => {
@@ -174,3 +202,32 @@ $('div[class$=".code"]').each(el => {
   hljs.highlightElement(el);
 });
 });
+
+ //获取cookie
+ function getCookie(name) {
+     let nameEQ = name + "=";
+     console.log("cookie:");
+     console.log(document.cookie);
+   let ca = document.cookie.split(';'); //把cookie分割成组
+   for (let i = 0; i < ca.length; i++) {
+     let c = ca[i]; //取得字符串
+     while (c.charAt(0) == ' ') { //判断一下字符串有没有前导空格
+       c = c.substring(1, c.length); //有的话，从第二位开始取
+   }
+     if (c.indexOf(nameEQ) == 0) { //如果含有我们要的name
+       return unescape(c.substring(nameEQ.length, c.length));; //解码并截取我们要的值
+   }
+}
+return false;
+}
+ //设置cookie
+ function setCookie(name, value, seconds) {
+ seconds = seconds || 0;   //seconds有值就直接赋值，没有为0
+ var expires = "";
+ if (seconds != 0) {      //设置cookie生存时间
+     var date = new Date();
+     date.setTime(date.getTime() + (seconds * 1000));
+     expires = "; expires=" + date.toGMTString();
+ }
+ document.cookie = name + "=" + escape(value) + expires + "; path=/";   //转码并赋值
+}

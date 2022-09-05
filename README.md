@@ -30,8 +30,18 @@ pip install flask-cors --default-timeout=10000
 pip install bootstrap4 --default-timeout=10000
 pip install chinese_calendar --default-timeout=10000
 pip install gitpython --default-timeout=10000
+pip install pylint --default-timeout=10000
+pip install requests --default-timeout=10000
 
 注意安装完成后检查下werkzeug的版本是否与flask版本一致
+```
+
+## sqlite数据表创建
+运行环境中执行命令：
+```
+set FLASK_APP=such_test_web.py  # 设置app
+set FLASK_CONFIG=production  # 这一步根据需要设置当前环境，可选值为development,testing,production
+flask create  # 自定义的命令初始化表
 ```
 # 示范包使用
 `such_test_web.zip`为示范包，请先解压缩，再查看使用说明文档进行使用。

@@ -49,7 +49,6 @@ def login():
     if user is not None and user.verify_password(user_data['password']):
         remember_me = True if 'remember_me' in user_data and user_data['remember_me'] else False
         login_user(user, remember_me)
-        token=user.generate_auth_token(expiration=3600)
         token='Basic ' + b64encode(
                 (user.email + ':' + user_data['password']).encode('utf-8')).decode('utf-8')
         return option_ok(user.to_json(), **{'token': token, 'expiration': 3600})

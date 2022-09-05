@@ -73,7 +73,6 @@ def delete_api_by_id(data_id):
 @api.route('/interface/run', methods=['POST'])
 def run_api_by_id():
     """根据id运行接口"""
-    res=request
     data = request.json
     res = ProInterface.query.filter_by(id=data['id']).first_or_404()
     url_path = '/'.join(res.url.split('/')[0:-1])
